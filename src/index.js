@@ -2,8 +2,8 @@ console.log('index.js!');
 
 import './style.css';
 import 'bootstrap/dist/css/bootstrap.css';
-import {message} from './module1'
-import {select} from 'd3';
+// import {message} from './module1';
+import * as d3 from 'd3';
 
 //DATASET IMPORT 
 import {
@@ -11,27 +11,28 @@ import {
 	artistPromise,
 	dataCombined
 } from './data';
+
 import {
 	parseTrack,
 	parseArtist,
 	groupByYear,
-	artistInfo
+	artistApp
 } from './utl';
 
 //VIEW MODULES 
-import ranking from './viewModules/ranking';
+import trackRanking from './viewModules/ranking';
+import artistBubbles from './viewModules/artistBubbles';
+import audioFeature from './viewModules/feature';
 
 
 /*
  * DATA IMPORT
  */
  //DATA PROMISE IMPORT
- trackPromise.then(track => renderMenu(track));
+ // trackPromise.then(track => renderMenu(track));
 
-
+//UI for modules
 function renderMenu(year){
-	//Get list of countryCode values
-	const yearList = Array.from(countryCode.entries());
 
 	//Build UI for <select> menu
 	let menu = select('.nav')
@@ -56,3 +57,21 @@ function renderMenu(year){
 
 	 });
 }
+
+function renderBubbles(data, year){
+	// const bubbles = artistBubbles();
+
+	select('.artistBubble-container')
+		.each(function(){
+			artistBubbles(this, data);
+		});
+}
+
+function renderFeature(data){
+	select('.feature-container')
+		.each(function(){
+			audioFeature(this, data);
+		});
+}
+
+

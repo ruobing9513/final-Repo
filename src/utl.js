@@ -1,11 +1,12 @@
 //Utility functions for parsing metadata, migration data, and country code
-import {nest, sum} from 'd3';
+import {nest} from 'd3';
 
 function parseTrack(d){
 	return {
 		year: +d.Year,
 		artists_id: d.artists_id,
-		artist: d.artists,
+		artist_display: d.artists_display,
+		artist_data: d.artist_data,
 		track_name: d.track_name,
 		follower: +d.follower,
 		genre: d.genre,
@@ -25,8 +26,6 @@ function parseTrack(d){
 		tempo: +d.tempo,
 		Preview: d.Preview_url,
 		track_image: d.track_image,
-		x: Math.random() * 900,
-    	y: Math.random() * 800
 	}
 }
 
@@ -53,7 +52,6 @@ function transform(year, data){
 function groupByYear(data){
 	const yearData = d3.nest()
 		.key(d => d.year)
-		// .rollup(values => d3.sum(values, d => d.value))
 		.entries(musicAugmented);
 
 	return yearData;
@@ -61,9 +59,9 @@ function groupByYear(data){
 }
 
 
-function artistInfo(data){
+function artistApp(data){
 	const artistsData = d3.nest()
-		.key(d => d.artists_id)
+		.key(d => d.artist_data)
 		// .key(d => d.values.length)
 		.entries(musicAugmented)
 		.map(group => {
@@ -74,8 +72,8 @@ function artistInfo(data){
 			}
 		});
 
-		return artistInfo;
-		console.log(artistInfo);
+		return artistApp;
+		console.log(artistApp);
 }
 
 
@@ -83,5 +81,5 @@ export {
 	parseTrack,
 	parseArtist,
 	groupByYear,
-	artistInfo
+	artistApp
 }

@@ -5,15 +5,14 @@ import {
 
 import {csv} from 'd3';
 
-const trackPromise = csv('trackinfo.csv', parseTrack)
-	// .then(data => new Map(data));
+const trackPromise = csv('trackinfo.csv', parseTrack);
 const artistPromise = csv('artist.csv', parseArtist);
 
 const dataCombined = Promise.all([
 		trackPromise,
 		artistPromise,
 	])
-	.then(([trackinfo, artist]) => {
+	.then(([track, artist]) => {
 
 		//Convert artistcsv to a map
 		const artist_tmp = artist.map(d =>{
@@ -60,5 +59,5 @@ const dataCombined = Promise.all([
 export {
 	trackPromise,
 	artistPromise,
-	dataCombined
+	dataCombined,
 }
