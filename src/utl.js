@@ -1,5 +1,5 @@
 //Utility functions for parsing metadata, migration data, and country code
-import {nest} from 'd3';
+import {nest, filter, max, mean} from 'd3';
 
 function parseTrack(d){
 	return {
@@ -24,8 +24,9 @@ function parseTrack(d){
 		liveness: +d.liveness,
 		valence: +d.valence,
 		tempo: +d.tempo,
-		Preview: d.Preview_url,
+		preview: d.Preview_url,
 		track_image: d.track_image,
+
 	}
 }
 
@@ -50,36 +51,49 @@ function transform(year, data){
 }
 
 function groupByYear(data){
-	const yearData = d3.nest()
-		.key(d => d.year)
-		.entries(musicAugmented);
 
+	const yearData = nest()
+		.key(d => d.year)
+		.entries(data);
 	return yearData;
-	console.log(yearData);
 }
 
-
-function artistApp(data){
-	const artistsData = d3.nest()
+function groupByArtist(data){
+	const artistsData = nest()
 		.key(d => d.artist_data)
-		// .key(d => d.values.length)
-		.entries(musicAugmented)
-		.map(group => {
+		.entries(data)
+		.map(d => {
 			return {
-				artist: group.key, //converting into numbers
-				appearance: group.values.length
-
+			artist: d.key, 
+			appearance: d.values.length,
+			popularity: max(d.values, d=>d.popularity),
+			danceability_mean:mean(d.values, d=>d.danceability),
+			energy_mean:mean(d.values, d=>d.energy),
+			valence_mean:mean(d.values, d=>d.valence),
+			acousticness_mean: mean(d.values, d=>d.acousticness),
 			}
 		});
-
-		return artistApp;
-		console.log(artistApp);
+	return artistsData;
 }
 
+function yearByFeature(data){
+	const featureData = nest()
+	    .key(d => d.track_id)
+	    .entries(data)
+	    .map(f=>{
+	        return{
+	            track:f.key,
+	            features: f.values
+	        }
+	    });
+	return featureData;
+}
 
 export {
 	parseTrack,
 	parseArtist,
 	groupByYear,
-	artistApp
+	groupByArtist,
+	yearByFeature
+
 }

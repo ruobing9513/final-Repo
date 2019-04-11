@@ -1,22 +1,21 @@
 import * as d3 from 'd3';
 
-function artistBubbles(){
-	function exportFunction(data, rootDOM, key){
+	function artistBubbles(data, rootDOM){
 
 				const margin = {top: 60, right: 60, bottom: 60, left: 60},
 				    width = 960 - margin.left - margin.right,
 				    height = 700 - margin.top - margin.bottom;
-
-				data.forEach(d=>{
-					d.x = Math.random()*width;
-					d.y = Math.random()*height;
-				});
 
 				const plot2 = d3.select('.artistBubble-container')
 					.append('svg')
 					.attr('width', width)
 					.attr('height', height)
 					.attr("transform","translate(" + margin.left + "," + margin.top + ")")
+
+				data.forEach(d=>{
+					d.x = Math.random()*width;
+					d.y = Math.random()*height;
+				});
 
 				//TOOLTIP 
 
@@ -26,9 +25,9 @@ function artistBubbles(){
 					.style("opacity", 0);
 
 				//COLOR SCALE 
-				// const colorScale = d3.scaleLinear()
-				// 	.domain([1,123])
-				// 	.range(['#FFFACD','#DC143C']);
+				const colorScale = d3.scaleLinear()
+					.domain([0, 1])
+					.range(['#FFFACD','#DB7093']);
 
 				//UPDATE SELECTION 
 				const nodes = plot2.selectAll('.node')
@@ -46,7 +45,7 @@ function artistBubbles(){
 				nodesEnter.append('circle')
 					.attr('r', d=>d.appearance)
 					.style('fill-opacity',0.9)
-					.style('fill','#FF6347');
+					.style('fill',d=>colorScale(d.danceability_mean));
 
 				//ENTERING AND UPDATE
 				nodes.merge(nodesEnter)
@@ -107,10 +106,7 @@ function artistBubbles(){
 							.attr('transform', d => `translate(${d.x}, ${d.y})`);
 					})
 					.alpha(1);
-
-		}
-	return exportFunction;
-}
+	}
 
 export default artistBubbles;
 	

@@ -1,7 +1,6 @@
 import * as d3 from 'd3';
 
-function audioFeature(){
-	function exportFunction(data, rootDOM){
+	function audioFeature(data, rootDOM){
 
 	    //data
 	    //[{}, {}, {}...]x9
@@ -115,6 +114,5 @@ function audioFeature(){
 	    //EXIT SELECTION 
 	    nodes.exit().remove()
 	}
-	return exportFunction;
-}
+
 export default audioFeature;

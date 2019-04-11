@@ -3,10 +3,10 @@ import {
 	parseArtist
 } from './utl';
 
-import {csv} from 'd3';
+import * as d3 from 'd3';
 
-const trackPromise = csv('trackinfo.csv', parseTrack);
-const artistPromise = csv('artist.csv', parseArtist);
+const trackPromise = d3.csv('data/trackinfo.csv', parseTrack)
+const artistPromise = d3.csv('data/artist.csv', parseArtist);
 
 const dataCombined = Promise.all([
 		trackPromise,
@@ -21,9 +21,9 @@ const dataCombined = Promise.all([
 
 		// console.log(artist_tmp);
 		const artistMap = new Map(artist_tmp);
-		console.log(artistMap);
+		// console.log(artistMap);
 
-		const musicAugmented = trackinfo.map(d => {
+		const musicAugmented = track.map(d => {
 
 			const artist_id = artistMap.get(d.artists_id);
 			const artist_image = artistMap.get(d.artist_image);
@@ -46,18 +46,21 @@ const dataCombined = Promise.all([
 			if (artist_genre){
 				d.artist_genre = artist_genre
 			}
-
 		
 		return d;
 
 		});
-		console.log(musicAugmented);
+
+		// console.log(artistsData);
+		// console.log(featureData);
 
 		return musicAugmented;
 	});
 
+
+
 export {
 	trackPromise,
 	artistPromise,
-	dataCombined,
+	dataCombined
 }

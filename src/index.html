@@ -10,16 +10,22 @@
 
 		<!-- WEBPAGE LAYOUT -->
 		<h1 style="text-align: center">What kind of songs/artist are more likely to make it on <br>top 100 among Sportify users?</h1>
-		<p style="text-align: center">Analysis on artist genres, audio features and artist popularity</p>
-		<p style="text-align: center">What are those top 100 songs on Sportify from 2010 - 2018? </p>
-		<p style="text-align: center">Do people's taste of music change over the year? (audio feature)</p>
-		<p style="text-align: center">Who are those pop singers make it to the top 100 most often and what common features do they have? artistinfo</p>
-
 		<div class='main'>
-			<div class="nav" style='margin-left: 100px'></div>
-			<div class="ranking-container"></div>
-			<div class="artistBubble-container"></div>
-			<div class="feature-container"></div>
+			<div class="ranking-container">
+				<div class="nav" id="yearRanking" style="width:300px"></div>
+			</div>
+			<div class="artistBubble-container">
+				<div class="nav" id="featureArtist" style="width:300px"></div>
+			</div>
+			<div class="tooltip-container"></div>
+			<div class="feature-container">
+				<button type="button" class="btn btn-secondary">Danceability</button>
+				<button type="button" class="btn btn-secondary">Energy</button>
+				<button type="button" class="btn btn-secondary">Liveness</button>
+				<button type="button" class="btn btn-secondary">Speechiness</button>
+				<button type="button" class="btn btn-secondary">Acousticness</button>
+				<button type="button" class="btn btn-secondary">Valence</button>
+			</div>
 		</div>
 	</body>
 </html>
