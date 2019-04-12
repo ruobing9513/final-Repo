@@ -22,7 +22,7 @@ import * as d3 from 'd3';
 	       	// .tickSize(-width)
 	       	.scale(xScale));
 
-	    const tooltip = d3.select('.plot-1').append("div")
+	    const tooltip = d3.select('.ranking-container').append("div")
 	      .attr("class", "tooltip")
 	      .attr('width', 50)
 	      .style("opacity", 0);
@@ -39,8 +39,8 @@ import * as d3 from 'd3';
 			.attr("transform","translate(" + margin.left + "," + margin.top + ")")
 
 		//UPDATE SELECTION
-		const nodes = plot.selectAll('.ranking-container')
-			.data(data)
+		const nodes = plot.selectAll('.node')
+			.data(data);
 
 		nodes.exit().remove(); 
 
@@ -61,11 +61,10 @@ import * as d3 from 'd3';
 			.attr('transform', d => `translate(${xScale(d.ranking)} , ${yScale(d.popularity)})`);
 
 		nodesEnter
-			.select('circle')
+			.select('image')
 
 			.transition()
-			.duration(2000)
-			.attr('r',10);
+			.duration(2000);
 
 		nodesEnter
 			.on("mouseenter", function(d){

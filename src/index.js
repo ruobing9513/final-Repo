@@ -30,7 +30,7 @@ let currentYear = "2018";
 
 // trackPromise.then(track=>console.log(track))
 // artistPromise.then(artist=>console.log(artist))
-dataCombined.then(combined=>console.log(combined))
+// dataCombined.then(combined=>console.log(combined))
 
 /*
  * DATA IMPORT
@@ -39,7 +39,7 @@ dataCombined.then(combined=>console.log(combined))
  //DISPATCH 
  const globalDispatch = d3.dispatch('change:artist', 'change:year'); //broadcasting "artist info" to the modules
 
- globalDispatch.on('change:artist', (artist, displayName)=>{
+ globalDispatch.on('change:artist', (artist, id)=>{
 
  	originArtist = artist;
 
@@ -47,7 +47,6 @@ dataCombined.then(combined=>console.log(combined))
 
  	dataCombined.then(data=>{
  		const artistFiltered = data.filter(d=>d.artist_data === artist); //why repeated names? 
-
  		console.log(artistFiltered);
 
  		renderBubbles(groupByArtist(artistFiltered));
@@ -59,11 +58,12 @@ dataCombined.then(combined=>console.log(combined))
 
 dataCombined.then(() => 
 	globalDispatch.call(
-		'change:artist', null, 'Zedd'
+		'change:artist', null, 'Zedd', '2qxJFvFYMEDqd7ui6kSAcq'
 		)
 	);
 
-dataCombined.then(artist=>renderMenu_feature(artist));
+dataCombined.then(artist=>renderMenu_feature(groupByArtist(artist)));
+// dataCombined.then(artist=>renderBubbles(groupByArtist(artist)));
 
 
 globalDispatch.on('change:year', (year, displayName)=>{
@@ -85,7 +85,8 @@ dataCombined.then(() =>
 		)
 	);
 
-dataCombined.then(year=>renderMenu(year));
+dataCombined.then(year=>renderMenu(groupByYear(year)));
+dataCombined.then(year=>renderRanking(groupByYear(year)));
 
 //UI for modules
 
@@ -140,7 +141,7 @@ function renderFeature(data){
 function renderMenu(year){
 	const yearList = Array.from(year.entries());
 
-	// console.log(yearList);
+	console.log(yearList);
 
 	//Build UI for <select> menu
 	let menu = d3.select('.nav')
@@ -156,14 +157,14 @@ function renderMenu(year){
 		.data(yearList)
 		.enter()
 		.append('option')
-		.attr('value', d=>d.year)
-		.html(d => d[1].year);
+		.attr('value', d=>d[1].year)
+		.html(d => d[1].key);
 
 	//Define behavior for <select> menu
 	menu.on("change", function(){
 	    const year = this.value;
-	    const data = transform(year,groupByYear); 
-	    // const display = 
+	    const idx = this.selectedIndex;
+		const display = this.options[idx].innerHTML; 
 
 	 });
 }
@@ -171,7 +172,7 @@ function renderMenu(year){
 function renderMenu_feature(artist){
 //Get list of countryCode values
 	const artistList = Array.from(artist.entries());
-	// console.log(artistList)
+	console.log(artistList)
 	//Build UI for <select> menu
 	let menu = d3.select('#featureArtist')
 		.selectAll('select')
@@ -185,13 +186,13 @@ function renderMenu_feature(artist){
 		.data(artistList)
 		.enter()
 		.append('option')
-		.attr('value', d => d[1].code)
-		.html(d => d[1].artist_data);
+		.attr('value', d => d[1])
+		.html(d => d[1].artist);
 
 	//Define behavior for <select> menu
 	menu.on('change', function(){
 		const artist = this.value;
-		const display = this.options[idx].innerHTML;
+		const display = this.options[1].innerHTML;
 
 
 		globalDispatch.call('change:artist',null,artist);
