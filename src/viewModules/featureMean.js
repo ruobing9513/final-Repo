@@ -1,21 +1,21 @@
 import * as d3 from 'd3';
 
-	function drawTooltip(data, rootDOM){
-	    const margin = {top: 20, right: 20, bottom: 20, left: 20},
-	        width = 800 - margin.left - margin.right,
+	function drawTooltip(rootDOM, data){
+	    const margin = {top: 20, right: 20, bottom: 20, left: 10},
+	        width = 550 - margin.left - margin.right,
 	        height = 60 - margin.top - margin.bottom;
 
 	        const xScale = d3.scaleLinear().range([10, width]).domain([0,1]);
 
-	        const tooltip = d3.select('.plot-1').append("svg")
+	        const tooltip = d3.select('.tooltip-container').append("svg")
 	          .attr("class", "tooltip")
 	          .attr('width', 50)
 	          .style("opacity", 0);
 
 	        //danceability  
-	        const danceability = d3.select('.plot-1')
+	        const danceability = d3.select('.tooltip-container')
 	            .append('svg')
-	            .attr('width', width + 300)
+	            .attr('width', width + 100)
 	            .attr('height', height + 20)
 	            .attr("transform","translate(" + margin.left + "," + margin.top + ")")
 
@@ -27,7 +27,14 @@ import * as d3 from 'd3';
 	            // .tickSize(-width)
 	            .scale(xScale));
 
-	        danceability.selectAll('.plot-1')
+	        danceability.append('text')
+	        	.attr("transform","translate(" + (width + 10) + " ," + (height + 10) + ")")
+	        	.attr('class','x-title') 
+	           	.style("text-anchor", "left")
+	           	.style('fill', 'black')
+	           	.text("Danceability");
+
+	        danceability.selectAll('.tooltip-container')
 	            .data(data)
 	            .enter()
 	            .append('circle')
@@ -35,9 +42,10 @@ import * as d3 from 'd3';
 	            .attr('cx', d=> xScale(d.danceability_mean))
 	            .attr('cy', 20)
 	            .style('fill','#F5F5F5')
+	        console.log(data);
 
 	        //energy 
-	        const energy = d3.select('.plot-1')
+	        const energy = d3.select('.tooltip-container')
 	            .append('svg')
 	            .attr('width', width + 100)
 	            .attr('height', height + 20)
@@ -51,7 +59,15 @@ import * as d3 from 'd3';
 	            // .tickSize(-width)
 	            .scale(xScale));
 
-	        energy.selectAll('.plot-1')
+	        energy.append('text')
+	        	.attr("transform","translate(" + (width + 10) + " ," + (height + 10) + ")")
+	        	.attr('class','x-title')  
+	           	.style("text-anchor", "left")
+	           	.style('fill', 'black')
+	           	.style('stroke-width','5')
+	           	.text("Energy");
+
+	        energy.selectAll('.tooltip-container')
 	            .data(data)
 	            .enter()
 	            .append('circle')
@@ -61,7 +77,7 @@ import * as d3 from 'd3';
 	            .style('fill','green')
 
 	        //acousticness 
-	        const acousticness = d3.select('.plot-1')
+	        const acousticness = d3.select('.tooltip-container')
 	            .append('svg')
 	            .attr('width', width + 100)
 	            .attr('height', height + 20)
@@ -75,7 +91,14 @@ import * as d3 from 'd3';
 	            // .tickSize(-width)
 	            .scale(xScale));
 
-	        acousticness.selectAll('.plot-1')
+	        acousticness.append('text')
+	        	.attr("transform","translate(" + (width + 10) + " ," + (height + 10) + ")")
+	        	.attr('class','x-title')  
+	           	.style("text-anchor", "left")
+	           	.style('fill', 'black')
+	           	.text("Acousticness");
+
+	        acousticness.selectAll('.tooltip-container')
 	            .data(data)
 	            .enter()
 	            .append('circle')
@@ -85,7 +108,7 @@ import * as d3 from 'd3';
 	            .style('fill','black')
 
 	        //acousticness 
-	        const valence = d3.select('.plot-1')
+	        const valence = d3.select('.tooltip-container')
 	            .append('svg')
 	            .attr('width', width + 100)
 	            .attr('height', height + 20)
@@ -99,7 +122,14 @@ import * as d3 from 'd3';
 	            // .tickSize(-width)
 	            .scale(xScale));
 
-	        valence.selectAll('.plot-1')
+	        valence.append('text')
+	        	.attr("transform","translate(" + (width + 10) + " ," + (height + 10) + ")")
+	        	.attr('class','x-title')  
+	           	.style("text-anchor", "left")
+	           	.style('fill', 'black')
+	           	.text("Valence");
+
+	        valence.selectAll('.tooltip-container')
 	            .data(data)
 	            .enter()
 	            .append('circle')
@@ -109,7 +139,7 @@ import * as d3 from 'd3';
 	            .style('fill','orange')
 
 	        //speechiness
-	        const speechiness = d3.select('.plot-1')
+	        const speechiness = d3.select('.tooltip-container')
 	            .append('svg')
 	            .attr('width', width + 100)
 	            .attr('height', height + 20)
@@ -123,7 +153,14 @@ import * as d3 from 'd3';
 	            // .tickSize(-width)
 	            .scale(xScale));
 
-	        speechiness.selectAll('.plot-1')
+	        speechiness.append('text')
+	        	.attr("transform","translate(" + (width + 10) + " ," + (height + 10) + ")")
+	        	.attr('class','x-title')  
+	           	.style("text-anchor", "left")
+	           	.style('fill', 'black')
+	           	.text("Speechiness");
+
+	        speechiness.selectAll('.tooltip-container')
 	            .data(data)
 	            .enter()
 	            .append('circle')
@@ -133,7 +170,7 @@ import * as d3 from 'd3';
 	            .style('fill','blue')
 
 	        //Liveness
-	        const liveness = d3.select('.plot-1')
+	        const liveness = d3.select('.tooltip-container')
 	            .append('svg')
 	            .attr('width', width + 100)
 	            .attr('height', height + 20)
@@ -148,7 +185,15 @@ import * as d3 from 'd3';
 	            // .tickSize(-width)
 	            .scale(xScale));
 
-	        liveness.selectAll('.plot-1')
+	        liveness.append('text')
+	        	.attr("transform","translate(" + (width + 10) + " ," + (height + 10) + ")")
+	        	.attr('class','x-title')  
+	           	.style("text-anchor", "left")
+	           	// .style('fill', '#9E3B71')
+	           	.style('fill','black')
+	           	.text("Liveness");
+
+	        liveness.selectAll('.tooltip-container')
 	            .data(data)
 	            .enter()
 	            .append('circle')

@@ -26,6 +26,7 @@ function parseTrack(d){
 		tempo: +d.tempo,
 		preview: d.Preview_url,
 		track_image: d.track_image,
+		artist_image: d.artist_image
 
 	}
 }
@@ -61,16 +62,21 @@ function groupByYear(data){
 function groupByArtist(data){
 	const artistsData = nest()
 		.key(d => d.artist_data)
+		// .key(d => d.artist_image)
 		.entries(data)
 		.map(d => {
 			return {
 			artist: d.key, 
 			appearance: d.values.length,
-			popularity: max(d.values, d=>d.popularity),
+			details: d.values,
+			follower: max(d.values, d=>d.follower),
 			danceability_mean:mean(d.values, d=>d.danceability),
 			energy_mean:mean(d.values, d=>d.energy),
 			valence_mean:mean(d.values, d=>d.valence),
 			acousticness_mean: mean(d.values, d=>d.acousticness),
+			speechiness_mean: mean(d.values, d=>d.speechiness),
+			liveness_mean:mean(d.values, d=>d.liveness)
+			// image: d.values.key
 			}
 		});
 	return artistsData;
@@ -79,13 +85,7 @@ function groupByArtist(data){
 function yearByFeature(data){
 	const featureData = nest()
 	    .key(d => d.track_id)
-	    .entries(data)
-	    .map(f=>{
-	        return{
-	            track:f.key,
-	            features: f.values
-	        }
-	    });
+	    .entries(data);
 	return featureData;
 }
 

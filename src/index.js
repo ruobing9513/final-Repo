@@ -20,11 +20,26 @@ import {
 //VIEW MODULES 
 import trackRanking from './viewModules/ranking';
 import artistBubbles from './viewModules/artistBubbles';
-import audioFeature from './viewModules/feature';
+import danceability from './viewModules/danceability_feature';
+import energy from './viewModules/energy_feature';
+import liveness from './viewModules/liveness_feature';
+import speechiness from './viewModules/speechiness_feature';
+import valence from './viewModules/valence_feature';
+import acousticness from './viewModules/acousticness_feature';
 import drawTooltip from './viewModules/featureMean';
+import definition_d from './viewModules/defi_d.js';
+import definition_l from './viewModules/defi_l.js';
+import definition_s from './viewModules/defi_s.js';
+import definition_v from './viewModules/defi_v.js';
+import definition_e from './viewModules/defi_e.js';
+import definition_a from './viewModules/defi_a.js';
+
+
+
 
 let originArtist = "Zedd";
-let currentYear = "2018";
+let currentYear = 2015;
+let currentTrack = "6DCZcSspjsKoFjzjrWoCdn";
 
 //CHECK DATA CONSOLE
 
@@ -37,25 +52,23 @@ let currentYear = "2018";
  */
 
  //DISPATCH 
- const globalDispatch = d3.dispatch('change:artist', 'change:year'); //broadcasting "artist info" to the modules
+ const globalDispatch = d3.dispatch('change:artist', 'change:year', 'change:track'); //broadcasting "artist info" to the modules
 
  globalDispatch.on('change:artist', (artist, id)=>{
 
  	originArtist = artist;
 
- 	// console.log(dataCombined); //data is here
+ 	console.log(dataCombined); //data is here
 
  	dataCombined.then(data=>{
  		const artistFiltered = data.filter(d=>d.artist_data === artist); //why repeated names? 
  		console.log(artistFiltered);
 
- 		renderBubbles(groupByArtist(artistFiltered));
- 		renderMean(groupByArtist(artistFiltered));
- 		renderMenu_feature(groupByArtist(artistFiltered));
+ 		// renderMean(groupByArtist(artistFiltered));
  	})
  })
 
-
+//broadcast data 
 dataCombined.then(() => 
 	globalDispatch.call(
 		'change:artist', null, 'Zedd', '2qxJFvFYMEDqd7ui6kSAcq'
@@ -63,10 +76,11 @@ dataCombined.then(() =>
 	);
 
 dataCombined.then(artist=>renderMenu_feature(groupByArtist(artist)));
-// dataCombined.then(artist=>renderBubbles(groupByArtist(artist)));
+dataCombined.then(artist=>renderBubbles(groupByArtist(artist)));
+dataCombined.then(artist=>renderMean(groupByArtist(artist)));
 
 
-globalDispatch.on('change:year', (year, displayName)=>{
+globalDispatch.on('change:year', (year)=>{
 
  	currentYear = year;
 
@@ -74,27 +88,35 @@ globalDispatch.on('change:year', (year, displayName)=>{
  		const yearFiltered = data.filter(d=>d.year === year);  
 
  		console.log(yearFiltered);
-
- 		renderRanking(yearFiltered);
- 		renderMenu(groupByYear(yearFiltered));
  	})
  })
-dataCombined.then(() => 
-	globalDispatch.call(
-		'change:year', null, '2018'
-		)
-	);
 
 dataCombined.then(year=>renderMenu(groupByYear(year)));
 dataCombined.then(year=>renderRanking(groupByYear(year)));
 
+globalDispatch.on('change:track', (track)=>{
+
+	currentTrack = track;
+
+ 	dataCombined.then(track=>{renderDanceability(track)})
+ 	dataCombined.then(track=>{renderEnergy(track)})
+ 	dataCombined.then(track=>{renderSpeechiness(track)})
+ 	dataCombined.then(track=>{renderLiveness(track)})
+ 	dataCombined.then(track=>{renderValence(track)})
+ 	dataCombined.then(track=>{renderAcousticness(track)})
+ })
+dataCombined.then(() => 
+	globalDispatch.call(
+		'change:track', null, '6DCZcSspjsKoFjzjrWoCdn'
+		)
+	);
+// dataCombined.then(track=>renderFeature(yearByFeature(track)));
+
+
 //UI for modules
 
-function renderRanking(year,data){
-	const rankingChart = trackRanking()
-		.onChangeYear(
-			year => globalDispatch.call('change:year', null, year)
-			)
+function renderRanking(data){
+
 	const charts = d3.select('.ranking-container')
 		.selectAll('.chart')
 		.data(data, d=>d.key);
@@ -102,20 +124,20 @@ function renderRanking(year,data){
 	const chartsEnter = charts.enter()
 		.append('div')
 		.attr('class','chart')
+
 	charts.exit().remove()
 
-	chart.merge(chartsEnter)
+	charts.merge(chartsEnter)
 		.each(function(d){
-			rankingChart(
+			trackRanking(
 				d.values,
-				this,
-				d.key
+				this
 				)
 		})
 
 }
 
-function renderMean(artist, data){
+function renderMean(data){
 
 	d3.select('.tooltip-container')
 		.each(function(){
@@ -123,7 +145,7 @@ function renderMean(artist, data){
 		})
 }
 
-function renderBubbles(artist, data){
+function renderBubbles(data){
 
 	d3.select('.artistBubble-container')
 		.each(function(){
@@ -131,12 +153,41 @@ function renderBubbles(artist, data){
 		});
 }
 
-function renderFeature(data){
-	d3. select('.feature-container')
-		.each(function(){
-			audioFeature(this, data);
+function renderDanceability(data){
+	d3.selectAll('#danceability')
+		.on('click', function(){danceability(this, data)});
+}
+
+function renderEnergy(data){
+	d3.selectAll('#energy').on('click', function(){
+			energy(this, data);
 		});
 }
+
+function renderValence(data){
+	d3.selectAll('#valence').on('click', function(){
+			valence(this, data);
+		});
+}
+
+function renderSpeechiness(data){
+	d3.selectAll('#speechiness').on('click', function(){
+			speechiness(this, data);
+		});
+}
+
+function renderAcousticness(data){
+	d3.selectAll('#acousticness').on('click', function(){
+			acousticness(this, data);
+		});
+}
+
+function renderLiveness(data){
+	d3.selectAll('#liveness').on('click', function(){
+			liveness(this, data);
+		});
+}
+
 
 function renderMenu(year){
 	const yearList = Array.from(year.entries());
