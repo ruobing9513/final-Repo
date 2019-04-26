@@ -12,11 +12,19 @@ import * as d3 from 'd3';
 	          .attr('width', 50)
 	          .style("opacity", 0);
 
+	        const min = d3.min(data, d=>d.follower); 
+
+	        const max = d3.max(data, d=>d.follower); 
+
+	        const colorScale = d3.scaleLinear()
+	        	.domain([min,max])
+	        	.range(['#FFEFD5','#9E3B71']);
+
 	        //danceability  
 	        const danceability = d3.select('.tooltip-container')
 	            .append('svg')
 	            .attr('width', width + 100)
-	            .attr('height', height + 20)
+	            .attr('height', height + 30)
 	            .attr("transform","translate(" + margin.left + "," + margin.top + ")")
 
 	        const danceability_axis = danceability.append("g")
@@ -41,14 +49,15 @@ import * as d3 from 'd3';
 	            .attr('r',5)
 	            .attr('cx', d=> xScale(d.danceability_mean))
 	            .attr('cy', 20)
-	            .style('fill','#F5F5F5')
+	            .style('opacity',0.6)
+	            .style('fill',d=>colorScale(d.follower))
 	        console.log(data);
 
 	        //energy 
 	        const energy = d3.select('.tooltip-container')
 	            .append('svg')
 	            .attr('width', width + 100)
-	            .attr('height', height + 20)
+	            .attr('height', height + 30)
 	            .attr("transform","translate(" + margin.left + "," + margin.top + ")")
 
 	        const energy_axis = energy.append("g")
@@ -74,13 +83,14 @@ import * as d3 from 'd3';
 	            .attr('r',5)
 	            .attr('cx', d=> xScale(d.energy_mean))
 	            .attr('cy', 20)
-	            .style('fill','green')
+	            .style('opacity',0.6)
+	            .style('fill',d=>colorScale(d.follower))
 
 	        //acousticness 
 	        const acousticness = d3.select('.tooltip-container')
 	            .append('svg')
 	            .attr('width', width + 100)
-	            .attr('height', height + 20)
+	            .attr('height', height + 30)
 	            .attr("transform","translate(" + margin.left + "," + margin.top + ")")
 
 	        const acousticness_axis = acousticness.append("g")
@@ -105,13 +115,14 @@ import * as d3 from 'd3';
 	            .attr('r',5)
 	            .attr('cx', d=> xScale(d.acousticness_mean))
 	            .attr('cy', 20)
-	            .style('fill','black')
+	            .style('opacity',0.6)
+	            .style('fill',d=>colorScale(d.follower))
 
 	        //acousticness 
 	        const valence = d3.select('.tooltip-container')
 	            .append('svg')
 	            .attr('width', width + 100)
-	            .attr('height', height + 20)
+	            .attr('height', height + 30)
 	            .attr("transform","translate(" + margin.left + "," + margin.top + ")")
 
 	        const valence_axis = valence.append("g")
@@ -136,13 +147,14 @@ import * as d3 from 'd3';
 	            .attr('r',5)
 	            .attr('cx', d=> xScale(d.valence_mean))
 	            .attr('cy', 20)
-	            .style('fill','orange')
+	            .style('opacity',0.6)
+	            .style('fill',d=>colorScale(d.follower))
 
 	        //speechiness
 	        const speechiness = d3.select('.tooltip-container')
 	            .append('svg')
 	            .attr('width', width + 100)
-	            .attr('height', height + 20)
+	            .attr('height', height + 30)
 	            .attr("transform","translate(" + margin.left + "," + margin.top + ")")
 
 	        const speechiness_axis = speechiness.append("g")
@@ -167,13 +179,14 @@ import * as d3 from 'd3';
 	            .attr('r',5)
 	            .attr('cx', d=> xScale(d.speechiness_mean))
 	            .attr('cy', 20)
-	            .style('fill','blue')
+	            .style('opacity',0.6)
+	            .style('fill',d=>colorScale(d.follower))
 
 	        //Liveness
 	        const liveness = d3.select('.tooltip-container')
 	            .append('svg')
 	            .attr('width', width + 100)
-	            .attr('height', height + 20)
+	            .attr('height', height + 30)
 	            .attr("transform","translate(" + margin.left + "," + margin.top + ")")
 
 	        const liveness_axis = liveness.append("g")
@@ -200,7 +213,8 @@ import * as d3 from 'd3';
 	            .attr('r',5)
 	            .attr('cx', d=> xScale(d.liveness_mean))
 	            .attr('cy', 20)
-	            .style('fill','purple')
+	            .style('opacity',0.6)
+	            .style('fill',d=>colorScale(d.follower))
 	}
 
 export default drawTooltip;

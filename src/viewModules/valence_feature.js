@@ -31,6 +31,7 @@ import definition_v from './defi_v.js';
 	    plot3.append('text')
 	    	.attr("transform","translate(" + (width - 50) + " ," + (height + margin.top + 20) + ")") 
 	       	.style("text-anchor", "middle")
+	       	.style('font-size', '12px')
 	       	.text("Ranking");
 
 	    // Add the Y Axis
@@ -42,15 +43,19 @@ import definition_v from './defi_v.js';
 	        	.scale(yScale));
 
 	    plot3.append('text')
-	    	.attr("transform","rotate(-90)") 
-	    	.attr("y", 0 - margin.left)
-	    	.attr("x",0 - (height))
-	    	.attr("dy", "1em")
+	    	.attr("y", margin.top-10)
+	    	.attr("x", 10 + margin.left)
+	    	.style('font-size', '12px')
 	       	.style("text-anchor", "middle")
 	       	.text("Year");
 
 	    const tooltip  = d3.select('.tooltip-feature').append("div")
 	        .attr("class", "tooltip_feature")
+	        .attr('width', 80)
+	        .style("opacity", 0);
+
+	    const tooltip1  = d3.select('.feature-container').append("div")
+	        .attr("class", "tooltip1")
 	        .attr('width', 80)
 	        .style("opacity", 0);
 
@@ -101,6 +106,7 @@ import definition_v from './defi_v.js';
 	        .duration(1500)
 	        .attr('r',4)
 	        .attr('fill-opacity',1)
+	        .style('cursor','pointer')
 	        .style('fill', d=>colorScale(d.valence));
 
 	    nodes.merge(nodesEnter)
@@ -137,17 +143,26 @@ import definition_v from './defi_v.js';
 	                    );
 	        })
 
-	        // .on("mouseout", function(d){
-	        //     d3.select(this)
-	        //     .attr('r', 10)
-	        //     .attr('fill','black')
-	        //     .attr('fill-opacity', 1);
-	        //     // .style('stroke-width',1);
+	        .on('mouseover', function(d){
 
-	        //     tooltip.transition()
-	        //          .duration(500)
-	        //          .style("opacity", 0);
-	        // });
+	        	tooltip1.transition()
+	        			.duration(200)
+	        			.style('opacity',1)
+
+	        	tooltip1
+	        			.html(d.artist_display + ' - ' + d.track_name)
+	        			.style("left", (d3.event.pageX + 20 ) +"px")
+              			.style("top", (d3.event.pageY + 20) + "px")
+              			.style("display", "inline-block")
+
+
+	        })
+
+	        .on("mouseout", function(d){
+	            tooltip1.transition()
+	                 .duration(500)
+	                 .style("opacity", 0);
+	        });
 
 
 	    //EXIT SELECTION 

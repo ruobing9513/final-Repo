@@ -50,37 +50,6 @@ import * as d3 from 'd3';
 				.attr('class','node_image rounded-circle')
 				.attr("xlink:href", d=>d.artist_image);
 
-			nodes.merge(nodesEnter)
-				.on("click", function(d){
-					d3.select(this)
-					.style('fill','#FF6347')
-					.attr('r',10)
-					.attr('fill-opacity', .8)
-					
-				    tooltip.transition()
-				          .duration(200)
-				          .style('opacity',1)
-				          .style("left", (d3.event.pageX - 34) + "px")
-				          .style("top", (d3.event.pageY - 12) + "px");
-				    tooltip
-				    	//TRACK IMAGE AND RANKING DOESNT MATCH WITH THE TRACK AND ARTIST 
-				          .html("<h1>" + "Rank: " + d.ranking + "</h1>" 
-				          	+ "<h1>" + d.year + "</h1>" + 
-				          	+d.track_name + " - " + d.artist_display + "<br/>" 
-				          	+ "<br/>" + "<img src='"+d.track_image+"'/>"); 
-				})
-
-				.on("mouseout", function(d){
-					d3.select(this)
-					.attr('r', 10)
-					.style('fill','black')
-					.attr('fill-opacity', 1);
-					// .style('stroke-width',1);
-
-				    tooltip.transition()
-				         .duration(500)
-				         .style("opacity", 0);
-				});
 
 			//update 
 			plot.selectAll('.node_image')
@@ -93,14 +62,46 @@ import * as d3 from 'd3';
 				.call(d3.axisBottom()
 				.ticks(10)
 				.tickSize(-width)
-		       	.scale(xScale));
+		       	.scale(xScale))
 
-		   	plot.select('.axis-x')
-		   		.append('text')
-		   		.attr("transform","translate(" + (width-10) + " ," + (height-10) + ")")
-		   		.style("text-anchor", "left")
-	           	.style('fill', 'black')
-	           	.text("Ranking");
+   		   		.append('text')
+   		   		.attr("transform","translate(" + (width-10) + " ," + (height-10) + ")")
+   		   		.style("text-anchor", "left")
+   	           	.style('fill', 'black')
+   	           	.text("Ranking");
+		   		
+
+	        plot
+	        	.on("click", function(d){
+	        		d3.select(this)
+	        		.style('fill','#FF6347')
+	        		.attr('r',10)
+	        		.attr('fill-opacity', .8)
+	        		
+	        	    tooltip.transition()
+	        	          .duration(200)
+	        	          .style('opacity',1)
+	        	          .style("left", (d3.event.pageX - 34) + "px")
+	        	          .style("top", (d3.event.pageY - 12) + "px");
+	        	    tooltip
+	        	    	//TRACK IMAGE AND RANKING DOESNT MATCH WITH THE TRACK AND ARTIST 
+	        	          .html("<h1>" + "Rank: " + d.ranking + "</h1>" 
+	        	          	+ "<h1>" + d.year + "</h1>" + 
+	        	          	+d.track_name + " - " + d.artist_display + "<br/>" 
+	        	          	+ "<br/>" + "<img src='"+d.track_image+"'/>"); 
+	        	})
+
+	        	.on("mouseout", function(d){
+	        		d3.select(this)
+	        		.attr('r', 10)
+	        		.style('fill','black')
+	        		.attr('fill-opacity', 1);
+	        		// .style('stroke-width',1);
+
+	        	    tooltip.transition()
+	        	         .duration(500)
+	        	         .style("opacity", 0);
+	        	});
 
 	}
 

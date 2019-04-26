@@ -19,6 +19,7 @@ import {
 
 //VIEW MODULES 
 import trackRanking from './viewModules/ranking';
+import cluster from './viewModules/rankCluster';
 import artistBubbles from './viewModules/artistBubbles';
 import danceability from './viewModules/danceability_feature';
 import energy from './viewModules/energy_feature';
@@ -33,7 +34,7 @@ import definition_s from './viewModules/defi_s.js';
 import definition_v from './viewModules/defi_v.js';
 import definition_e from './viewModules/defi_e.js';
 import definition_a from './viewModules/defi_a.js';
-
+import colorControls from './viewModules/colorControls';
 
 
 
@@ -52,19 +53,44 @@ let currentTrack = "6DCZcSspjsKoFjzjrWoCdn";
  */
 
  //DISPATCH 
- const globalDispatch = d3.dispatch('change:artist', 'change:year', 'change:track'); //broadcasting "artist info" to the modules
+ const globalDispatch = d3.dispatch(
+ 	'change:artist', 
+ 	'change:year', 
+ 	'change:track', 
+ 	'change:color'); //broadcasting "artist info" to the modules
 
- globalDispatch.on('change:artist', (artist, id)=>{
+ colorControls(
+	 	d3.select('.color-control').node(),
+	 	['red','blue','by value'],
+	 	globalDispatch
+ 	);
+
+//cluster viz 
+
+globalDispatch.on('change:year', (year)=>{
+
+ 	currentYear = year;
+
+ 	dataCombined.then(data=>{
+ 		const yearFiltered = data.filter(d=>d.year === year);  
+
+ 		console.log(yearFiltered);
+ 	})
+ })
+
+dataCombined.then(year=>yearTitle(groupByYear(year)));
+dataCombined.then(year=>renderRanking(groupByYear(year)));
+
+//artist bubble
+globalDispatch.on('change:artist', (artist, id)=>{
 
  	originArtist = artist;
 
  	console.log(dataCombined); //data is here
 
  	dataCombined.then(data=>{
- 		const artistFiltered = data.filter(d=>d.artist_data === artist); //why repeated names? 
+ 		const artistFiltered = data.filter(d=>d.artist_data === artist); 
  		console.log(artistFiltered);
-
- 		// renderMean(groupByArtist(artistFiltered));
  	})
  })
 
@@ -80,19 +106,6 @@ dataCombined.then(artist=>renderBubbles(groupByArtist(artist)));
 dataCombined.then(artist=>renderMean(groupByArtist(artist)));
 
 
-globalDispatch.on('change:year', (year)=>{
-
- 	currentYear = year;
-
- 	dataCombined.then(data=>{
- 		const yearFiltered = data.filter(d=>d.year === year);  
-
- 		console.log(yearFiltered);
- 	})
- })
-
-dataCombined.then(year=>renderMenu(groupByYear(year)));
-dataCombined.then(year=>renderRanking(groupByYear(year)));
 
 globalDispatch.on('change:track', (track)=>{
 
@@ -104,13 +117,13 @@ globalDispatch.on('change:track', (track)=>{
  	dataCombined.then(track=>{renderLiveness(track)})
  	dataCombined.then(track=>{renderValence(track)})
  	dataCombined.then(track=>{renderAcousticness(track)})
+
  })
 dataCombined.then(() => 
 	globalDispatch.call(
 		'change:track', null, '6DCZcSspjsKoFjzjrWoCdn'
 		)
 	);
-// dataCombined.then(track=>renderFeature(yearByFeature(track)));
 
 
 //UI for modules
@@ -119,7 +132,7 @@ function renderRanking(data){
 
 	const charts = d3.select('.ranking-container')
 		.selectAll('.chart')
-		.data(data, d=>d.key);
+		.data(data);
 
 	const chartsEnter = charts.enter()
 		.append('div')
@@ -129,11 +142,12 @@ function renderRanking(data){
 
 	charts.merge(chartsEnter)
 		.each(function(d){
-			trackRanking(
+			cluster(
 				d.values,
 				this
 				)
 		})
+	globalDispatch.on('change:year',null, 2018);
 
 }
 
@@ -146,11 +160,16 @@ function renderMean(data){
 }
 
 function renderBubbles(data){
+	const bubbles = artistBubbles();
 
 	d3.select('.artistBubble-container')
 		.each(function(){
-			artistBubbles(this, data);
+			bubbles(this, data);
 		});
+
+	globalDispatch.on('change:color', colorOption => {
+		bubbles.updateColor(colorOption);
+	});
 }
 
 function renderDanceability(data){
@@ -189,37 +208,6 @@ function renderLiveness(data){
 }
 
 
-function renderMenu(year){
-	const yearList = Array.from(year.entries());
-
-	console.log(yearList);
-
-	//Build UI for <select> menu
-	let menu = d3.select('.nav')
-		.selectAll('select')
-		.data([1]);
-
-	menu = menu.enter()
-		.append('select')
-		.attr('class','form-control form-control-sm')
-		.merge(menu);
-	//Add <option> tag under <select>
-	menu.selectAll('option')
-		.data(yearList)
-		.enter()
-		.append('option')
-		.attr('value', d=>d[1].year)
-		.html(d => d[1].key);
-
-	//Define behavior for <select> menu
-	menu.on("change", function(){
-	    const year = this.value;
-	    const idx = this.selectedIndex;
-		const display = this.options[idx].innerHTML; 
-
-	 });
-}
-
 function renderMenu_feature(artist){
 //Get list of countryCode values
 	const artistList = Array.from(artist.entries());
@@ -245,8 +233,7 @@ function renderMenu_feature(artist){
 		const artist = this.value;
 		const display = this.options[1].innerHTML;
 
-
-		globalDispatch.call('change:artist',null,artist);
+		globalDispatch.on('change:artist',null,artist);
 	});
 }
 

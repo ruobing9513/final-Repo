@@ -5,7 +5,7 @@ import definition_s from './defi_s.js';
 
 	    //data
 	    //[{}, {}, {}...]x9
-	    const margin = {top: 20, right: 10, bottom: 20, left: 10},
+	    const margin = {top: 10, right: 10, bottom: 20, left: 10},
 	        width = 900 - margin.left - margin.right,
 	        height = 500 - margin.top - margin.bottom;
 
@@ -31,6 +31,7 @@ import definition_s from './defi_s.js';
 	    plot3.append('text')
 	    	.attr("transform","translate(" + (width - 50) + " ," + (height + margin.top + 20) + ")") 
 	       	.style("text-anchor", "middle")
+	       	.style('font-size', '12px')
 	       	.text("Ranking");
 
 	    // Add the Y Axis
@@ -42,11 +43,12 @@ import definition_s from './defi_s.js';
 	        	.scale(yScale));
 
 	    plot3.append('text')
-	    	.attr("transform","rotate(-90)") 
-	    	.attr("y", 0 - margin.left)
-	    	.attr("x",0 - (height))
+	    	// .attr("transform","rotate(-90)") 
+	    	.attr("y", margin.top-10)
+	    	.attr("x", 10 + margin.left)
 	    	.attr("dy", "1em")
 	       	.style("text-anchor", "middle")
+	       	.style('font-size', '12px')
 	       	.text("Year");
 
 	    const tooltip  = d3.select('.tooltip-feature').append("div")
@@ -54,7 +56,12 @@ import definition_s from './defi_s.js';
 	        .attr('width', 80)
 	        .style("opacity", 0);
 
-	    const text_defi = d3.select('.feature-container').append('div')
+	    const tooltip1  = d3.select('.feature-container').append("div")
+	        .attr("class", "tooltip1")
+	        .attr('width', 80)
+	        .style("opacity", 0);
+
+	    const text_defi = d3.select('.tooltip-feature').append('div')
 	    	.attr('class','feature-defi')
 	    	.attr('width',600)
 	    	.attr('height',300);
@@ -99,6 +106,7 @@ import definition_s from './defi_s.js';
 	        .duration(1500)
 	        .attr('r',4)
 	        .attr('fill-opacity',1)
+	        .style('cursor','pointer')
 	        .style('fill', d=>colorScale(d.speechiness));
 
 	    nodes.merge(nodesEnter)
@@ -133,19 +141,29 @@ import definition_s from './defi_s.js';
 	                    //audio
 	                    + "<br/>" + "<audio controls>" + "<source src=" + "'" +d.preview+ "'" + " type=" + "'audio/mpeg'>"
 	                    );
+
 	        })
 
-	        // .on("mouseout", function(d){
-	        //     d3.select(this)
-	        //     .attr('r', 10)
-	        //     .attr('fill','black')
-	        //     .attr('fill-opacity', 1);
-	        //     // .style('stroke-width',1);
+	        .on('mouseover', function(d){
 
-	        //     tooltip.transition()
-	        //          .duration(500)
-	        //          .style("opacity", 0);
-	        // });
+	        	tooltip1.transition()
+	        			.duration(200)
+	        			.style('opacity',1)
+
+	        	tooltip1
+	        			.html(d.artist_display + ' - ' + d.track_name)
+	        			.style("left", (d3.event.pageX + 20 ) +"px")
+              			.style("top", (d3.event.pageY + 20) + "px")
+              			.style("display", "inline-block")
+
+
+	        })
+
+	        .on("mouseout", function(d){
+	            tooltip1.transition()
+	                 .duration(500)
+	                 .style("opacity", 0);
+	        });
 
 	}
 
