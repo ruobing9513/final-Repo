@@ -18,22 +18,28 @@ import {
 } from './utl';
 
 //VIEW MODULES 
-import trackRanking from './viewModules/ranking';
+//ranking cluster 
 import cluster from './viewModules/rankCluster';
+
+//bubbles 
 import artistBubbles from './viewModules/artistBubbles';
-import danceability from './viewModules/danceability_feature';
+import drawTooltip from './viewModules/featureMean';
+
+//audio feature
 import energy from './viewModules/energy_feature';
+import danceability from './viewModules/danceability_feature';
 import liveness from './viewModules/liveness_feature';
 import speechiness from './viewModules/speechiness_feature';
 import valence from './viewModules/valence_feature';
 import acousticness from './viewModules/acousticness_feature';
-import drawTooltip from './viewModules/featureMean';
+
 import definition_d from './viewModules/defi_d.js';
 import definition_l from './viewModules/defi_l.js';
 import definition_s from './viewModules/defi_s.js';
 import definition_v from './viewModules/defi_v.js';
 import definition_e from './viewModules/defi_e.js';
 import definition_a from './viewModules/defi_a.js';
+//doesnt work 
 import colorControls from './viewModules/colorControls';
 
 
@@ -56,14 +62,13 @@ let currentTrack = "6DCZcSspjsKoFjzjrWoCdn";
  const globalDispatch = d3.dispatch(
  	'change:artist', 
  	'change:year', 
- 	'change:track', 
- 	'change:color'); //broadcasting "artist info" to the modules
+ 	'change:track'); //broadcasting "artist info" to the modules
 
- colorControls(
-	 	d3.select('.color-control').node(),
-	 	['red','blue','by value'],
-	 	globalDispatch
- 	);
+ // colorControls(
+	//  	d3.select('.color-control').node(),
+	//  	['red','blue','by value'],
+	//  	globalDispatch
+ // 	);
 
 //cluster viz 
 
@@ -78,7 +83,7 @@ globalDispatch.on('change:year', (year)=>{
  	})
  })
 
-dataCombined.then(year=>yearTitle(groupByYear(year)));
+// dataCombined.then(year=>yearTitle(groupByYear(year)));
 dataCombined.then(year=>renderRanking(groupByYear(year)));
 
 //artist bubble

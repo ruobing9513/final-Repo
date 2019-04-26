@@ -123,7 +123,7 @@ import * as d3 from 'd3';
 				.force('y', forceY)
 				.force('collide', forceCollide)
 				.force('center', d3.forceCenter(width / 2.5, height/2.5))
-				// .force('charge', d3.forceManyBody().strength(d=>d.popularity))
+				.force('charge', d3.forceManyBody().strength(10))
 				// .force('link', forceLink)
 				.nodes(data) //start the simulation
 				.on('tick', () => {

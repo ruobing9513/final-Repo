@@ -1,4 +1,6 @@
 /*STYLESHEET FOR WEBPAGE*/
+
+	/*TITLE AND SUB*/
 	#title{
 		font-family: 'Anton', sans-serif;
 		font-size: 60px;
@@ -15,11 +17,19 @@
 		font-family: 'Lato', sans-serif;
 	}
 
+	.cover {
+		width: 100%;
+		height: 100%;
+		align-items: center;
+	}
+
 	h2{
 		font-size: 22px;
 		font-family: 'Lato', sans-serif;
 		text-align: center;
 	}
+
+	/*TEXT*/
 
 	.text{
 		text-align: left;
@@ -39,12 +49,8 @@
 	  	height: 150px;
 	}
 
-	.cover {
-		width: 100%;
-		height: 100%;
-		align-items: center;
-	}
 
+	/*VIZ*/
 	.chart{
 		/*margin: 2%;*/
 		text-align: center;
@@ -65,6 +71,34 @@
 		float: left;
 		margin-top: -2%;
 	}
+
+	.artistBubble-img{
+		float:left;
+		/*background-color: red;*/
+		margin-left: 30%;
+		margin-top: 1%;
+		width: 200px;
+		height: 200px;
+	}
+
+	.rounded{
+		width: 100%;
+		height: 100%;
+	}
+
+	.feature-container{
+		text-align: left;
+		margin-left: 5%;
+		float: left;
+	}
+
+	.track{
+		font-family: 'Lato', sans-serif;
+		font-size: 20px;
+		font-weight: 900;
+	}
+
+	/*TOOLTIP*/
 	
 	.tooltip-container, .x-title{
 		text-align: left;
@@ -109,19 +143,7 @@
 		height: 50px;
 		/*background-color: red;*/
 	}
-	.artistBubble-img{
-		float:left;
-		/*background-color: red;*/
-		margin-left: 30%;
-		margin-top: 1%;
-		width: 200px;
-		height: 200px;
-	}
-
-	.rounded{
-		width: 100%;
-		height: 100%;
-	}
+	
 
 	.artistBubble-tooltip{
 		text-align: right;
@@ -133,11 +155,7 @@
 		height: 250px;
 	}
 
-	.feature-container{
-		text-align: left;
-		margin-left: 5%;
-		float: left;
-	}
+	
 	.tooltip-feature{
 		width: 350px;
 		height: 500px;
@@ -151,9 +169,5 @@
 		margin-left: 25%;
 		margin-right: 25%;
 	}
-	.track{
-		font-family: 'Lato', sans-serif;
-		font-size: 20px;
-		font-weight: 900;
-	}
+	
 
